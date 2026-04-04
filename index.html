@@ -49,7 +49,25 @@ font-size: 15px;
 background: #fff;
 outline: none;
 }
+/* 按钮样式改成a标签适配 */
 .btn {
+display: block;
+background: #007aff;
+color: white;
+text-align: center;
+padding: 14px;
+border-radius: 12px;
+margin: 10px 0;
+font-size: 16px;
+font-weight: 500;
+text-decoration: none;
+transition: 0.2s;
+}
+.btn:active {
+transform: scale(0.97);
+}
+/* 普通按钮的样式（关于按钮） */
+.btn-static {
 background: #007aff;
 color: white;
 text-align: center;
@@ -61,7 +79,7 @@ font-weight: 500;
 cursor: pointer;
 transition: 0.2s;
 }
-.btn:active {
+.btn-static:active {
 transform: scale(0.97);
 }
 .tag {
@@ -82,7 +100,7 @@ text-align: center;
 font-size: 12px;
 color: #999;
 margin-top: 30px;
-line-height: 1.6;
+line-height: 1.5;
 }
 .about-content {
 display: none;
@@ -126,9 +144,9 @@ color: #333;
         <span class="tag">无广告</span>
     </div>
 
-    <!-- 加上跳转代码，点击按钮跳转到功能页面 -->
-    <div class="btn" id="btn1" onclick="window.location.href='https://superipa.github.io/SuperIPA/platform.html'">Download Super IPA</div>
-    <div class="btn" onclick="toggleAbout()">About Super IPA</div>
+    <!-- 用a标签做跳转按钮，绝对路径，百分百能跳 -->
+    <a href="https://superipa.github.io/SuperIPA/platform.html" class="btn" id="btn1">Use Super IPA</a>
+    <div class="btn-static" onclick="toggleAbout()">About Super IPA</div>
 
     <div class="about-content" id="about">
         Super IPA is a free, clean, safe iOS signature tool.<br>
@@ -152,29 +170,24 @@ const lang = document.getElementById('langSwitch');
 lang.addEventListener('change', function() {
     if(this.value == 'zh') {
         document.getElementById('desc').innerText = "简洁 · 纯净 · iOS 全版本支持";
-        document.getElementById('btn1').innerText = "使用 Super IPA";
-        document.querySelector('[onclick="toggleAbout()"]').innerText = "关于 Super IPA 说明";
+        document.getElementById('btn1').innerText = "进入工具";
+        document.querySelector('.btn-static').innerText = "关于 Super IPA";
         document.getElementById('copyright').innerHTML = "Super IPA © 2026<br>安全纯净 | 无广告 | 自主搭建";
         document.getElementById('tagEn').style.display = "none";
         document.getElementById('tagZh').style.display = "block";
         document.getElementById('about').innerHTML = 
-        "Super IPA 是一款免费、纯净、安全的iOS签名工具。<br>"+
-        "免越狱、无广告、永久无限使用。<br><br>"+
-        "祝您使用愉快 ❤️";
+        "Super IPA 是免费、纯净、安全的iOS签名工具。<br>免越狱、无广告、永久无限使用。<br><br>祝您使用愉快 ❤️";
     } else {
         document.getElementById('desc').innerText = "Simple · Clean · Full iOS Support";
-        document.getElementById('btn1').innerText = "Download Super IPA";
-        document.querySelector('[onclick="toggleAbout()"]').innerText = "About Super IPA";
+        document.getElementById('btn1').innerText = "Use Super IPA";
+        document.querySelector('.btn-static').innerText = "About Super IPA";
         document.getElementById('copyright').innerHTML = "Super IPA © 2026<br>Safe & Clean | No Ads | Self Hosted";
         document.getElementById('tagEn').style.display = "block";
         document.getElementById('tagZh').style.display = "none";
         document.getElementById('about').innerHTML = 
-        "Super IPA is a free, clean, safe iOS signature tool.<br>"+
-        "No jailbreak required, no ads, unlimited use forever.<br><br>"+
-        "Made with ❤️ by yourself.";
+        "Super IPA is a free, clean, safe iOS signature tool.<br>No jailbreak required, no ads, unlimited use forever.<br><br>Made with ❤️ by yourself.";
     }
 });
 </script>
-
 </body>
 </html>
