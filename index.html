@@ -59,6 +59,10 @@ margin: 10px 0;
 font-size: 16px;
 font-weight: 500;
 cursor: pointer;
+transition: 0.2s;
+}
+.btn:active {
+transform: scale(0.97);
 }
 .tag {
 background: #f0f5ff;
@@ -78,7 +82,7 @@ text-align: center;
 font-size: 12px;
 color: #999;
 margin-top: 30px;
-line-height: 1.5;
+line-height: 1.6;
 }
 .about-content {
 display: none;
@@ -122,7 +126,8 @@ color: #333;
         <span class="tag">无广告</span>
     </div>
 
-    <div class="btn" id="btn1">Download Super IPA</div>
+    <!-- 加上跳转代码，点击按钮跳转到功能页面 -->
+    <div class="btn" id="btn1" onclick="window.location.href='https://superipa.github.io/SuperIPA/platform.html'">Download Super IPA</div>
     <div class="btn" onclick="toggleAbout()">About Super IPA</div>
 
     <div class="about-content" id="about">
@@ -140,18 +145,14 @@ color: #333;
 <script>
 function toggleAbout() {
     const about = document.getElementById("about");
-    if (about.style.display === "none" || about.style.display === "") {
-        about.style.display = "block";
-    } else {
-        about.style.display = "none";
-    }
+    about.style.display = about.style.display === "none" ? "block" : "none";
 }
 
 const lang = document.getElementById('langSwitch');
 lang.addEventListener('change', function() {
     if(this.value == 'zh') {
         document.getElementById('desc').innerText = "简洁 · 纯净 · iOS 全版本支持";
-        document.getElementById('btn1').innerText = "下载 Super IPA";
+        document.getElementById('btn1').innerText = "使用 Super IPA";
         document.querySelector('[onclick="toggleAbout()"]').innerText = "关于 Super IPA 说明";
         document.getElementById('copyright').innerHTML = "Super IPA © 2026<br>安全纯净 | 无广告 | 自主搭建";
         document.getElementById('tagEn').style.display = "none";
