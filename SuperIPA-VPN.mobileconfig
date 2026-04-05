@@ -2,6 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <!-- 补全Missing name的核心字段 -->
+    <key>PayloadName</key>
+    <string>SuperIPA-DNS-Shield</string>
     <key>PayloadContent</key>
     <array>
         <dict>
@@ -12,23 +15,26 @@
             <key>PayloadIdentifier</key>
             <string>com.superipa.dns.1</string>
             <key>PayloadUUID</key>
-            <string>864E4F9A-XXXX-XXXX-XXXX-XXXXXXXXXXXX</string> <!-- 替换成随机UUID，可在线生成 -->
+            <string>864E4F9A-1234-5678-90AB-CDEF01234567</string> <!-- 替换为真实UUID -->
             <key>DNSSettings</key>
             <dict>
                 <key>DNSProtocol</key>
                 <string>HTTPS</string>
                 <key>ServerAddresses</key>
                 <array>
-                    <string>1.1.1.1</string> <!-- Cloudflare DNS -->
-                    <string>8.8.8.8</string> <!-- Google DNS -->
+                    <string>1.1.1.1</string>
+                    <string>8.8.8.8</string>
                 </array>
                 <key>ServerURL</key>
                 <string>https://cloudflare-dns.com/dns-query</string>
+                <!-- iOS 26新增要求：必须指定ServerName -->
+                <key>ServerName</key>
+                <string>cloudflare-dns.com</string>
                 <key>SupplementalMatchDomains</key>
                 <array>
-                    <string>ocsp.apple.com</string> <!-- 拦截苹果证书校验地址 -->
-                    <string>apple.com</string>
-                    <string>icloud.com</string>
+                    <string>ocsp.apple.com</string>
+                    <string>appldnld.apple.com</string>
+                    <string>gs.apple.com</string> <!-- 补充苹果证书校验关键域名 -->
                 </array>
                 <key>RestrictiveDNS</key>
                 <true/>
@@ -44,7 +50,7 @@
     <key>PayloadType</key>
     <string>Configuration</string>
     <key>PayloadUUID</key>
-    <string>864E4F9B-XXXX-XXXX-XXXX-XXXXXXXXXXXX</string> <!-- 替换成另一个随机UUID -->
+    <string>864E4F9B-1234-5678-90AB-CDEF01234568</string> <!-- 替换为真实UUID -->
     <key>PayloadVersion</key>
     <integer>1</integer>
 </dict>
