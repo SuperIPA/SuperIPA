@@ -119,7 +119,7 @@ top: 0;
 left: 0;
 width: 100%;
 height: 100%;
-background: rgba(0,0,0,0.8);
+background: rgba(0,0,0, 0.8);
 display: none;
 justify-content: center;
 align-items: center;
@@ -168,6 +168,17 @@ cursor: pointer;
 font-weight: 600;
 box-shadow: 0 4px 12px rgba(0,122,255,0.3);
 }
+.dnsProfile {
+background: #34c759;
+color: #fff;
+padding: 14px;
+border-radius: 12px;
+margin: 10px 0;
+font-size: 16px;
+cursor: pointer;
+font-weight: 600;
+box-shadow: 0 4px 12px rgba(52,199,89,0.3);
+}
 </style>
 </head>
 <body>
@@ -176,7 +187,7 @@ box-shadow: 0 4px 12px rgba(0,122,255,0.3);
     <div class="title" id="platformTitle">Platform</div>
 
     <select class="lang-select" id="langSwitch">
-        <option value="en">English</option>
+        <option value="en" selected>English</option>
         <option value="zh">中文</option>
     </select>
 
@@ -190,8 +201,9 @@ box-shadow: 0 4px 12px rgba(0,122,255,0.3);
         <div class="progress" id="progress"></div>
     </div>
 
-    <!-- 真实安装按钮，和你的manifest.plist精准对接 -->
-    <div class="installReal" onclick="installIPA()">📲 真实安装APP (Real Install)</div>
+    <div class="dnsProfile" onclick="installDNS()">🛡️ Install Anti-Revoke Profile</div>
+
+    <div class="installReal" onclick="installIPA()">📲 Real Install APP (Real Install)</div>
 
     <div class="item" onclick="openVideo()" id="m2">Super IPA Tutorial</div>
     <div class="item" onclick="openFix()" id="m3">⚙️ Fix Crash</div>
@@ -220,14 +232,20 @@ const progressBar = document.getElementById('progressBar');
 const progress = document.getElementById('progress');
 const modal = document.getElementById('modal');
 
-// 核心：和你GitHub上的manifest.plist完美对接的真实安装函数
 function installIPA() {
-    const plistUrl = "https://superipa.github.io/SuperIPA/manifest.plist"; // 你的plist路径
+    const plistUrl = "https://superipa.github.io/SuperIPA/manifest.plist";
     result.textContent = lang.value == 'zh' ? '📲 正在唤起安装…请稍等' : '📲 Calling install… Please wait';
-    // 苹果官方itms-services协议，真实触发安装
     setTimeout(() => {
         window.location.href = `itms-services://?action=download-manifest&url=${encodeURIComponent(plistUrl)}`;
     }, 800);
+}
+
+function installDNS() {
+    const profileUrl = "https://superipa.github.io/SuperIPA/SuperIPA-VPN.mobileconfig";
+    result.textContent = lang.value == 'zh' ? '📲 打开描述文件安装' : '📲 Open Profile to Install';
+    setTimeout(() => {
+        window.location.href = profileUrl;
+    }, 600);
 }
 
 lang.addEventListener('change', function() {
@@ -235,8 +253,9 @@ lang.addEventListener('change', function() {
         document.getElementById('platformTitle').innerText = "功能平台";
         document.getElementById('tipText').innerText = "仅可选择 .ipa 格式文件";
         document.getElementById('m1').innerHTML = "<span class='plus'>+</span> 导入IPA";
-        document.querySelector('.installReal').innerText = "📲 真实安装APP (Real Install)";
-        document.getElementById('m2').innerText = "Super IPA 使用教程";
+        document.querySelector('.dnsProfile').innerText = "🛡️ 安装防掉签描述文件";
+        document.querySelector('.installReal').innerText = "📲 真实安装APP";
+        document.getElementById('m2').innerText = "使用教程";
         document.getElementById('m3').innerText = "⚙️ 修复闪退";
         document.getElementById('m4').innerText = "ℹ️ 设备信息";
         document.getElementById('backBtn').innerText = "返回主页";
@@ -245,6 +264,7 @@ lang.addEventListener('change', function() {
         document.getElementById('platformTitle').innerText = "Platform";
         document.getElementById('tipText').innerText = "Only .ipa files can be selected";
         document.getElementById('m1').innerHTML = "<span class='plus'>+</span> Import IPA";
+        document.querySelector('.dnsProfile').innerText = "🛡️ Install Anti-Revoke Profile";
         document.querySelector('.installReal').innerText = "📲 Real Install APP";
         document.getElementById('m2').innerText = "Super IPA Tutorial";
         document.getElementById('m3').innerText = "⚙️ Fix Crash";
@@ -283,22 +303,24 @@ function openVideo() {
     modal.style.display = 'flex';
     if(lang.value == 'zh') {
         modalTitle.innerText = "使用教程";
-        modalDesc.innerText = "1. 点击「真实安装APP」按钮\n2. 允许iOS描述文件安装\n3. 桌面自动加载APP\n4. 安装完成后即可使用";
+        modalDesc.innerText = "1. 安装防掉签描述文件\n2. 点击真实安装APP\n3. 等待桌面安装完成\n4. 正常使用应用";
     } else {
         modalTitle.innerText = "Tutorial";
-        modalDesc.innerText = "1. Tap 「Real Install APP」\n2. Allow iOS profile install\n3. App loads on home screen\n4. Use after installation";
+        modalDesc.innerText = "1. Install Anti-Revoke Profile\n2. Tap Real Install APP\n3. Wait for installation\n4. Open and use";
     }
 }
+
 function openFix(){
     modal.style.display = 'flex';
     if(lang.value == 'zh') {
         modalTitle.innerText = "修复闪退";
-        modalDesc.innerText = "若安装后闪退，请安装防掉签描述文件：\n1. 打开设置-通用-描述文件\n2. 信任Super IPA证书\n3. 重启APP即可解决";
+        modalDesc.innerText = "1. 重新安装描述文件\n2. 信任证书\n3. 重启应用";
     } else {
         modalTitle.innerText = "Fix Crash";
-        modalDesc.innerText = "If crash after install:\n1. Settings > General > Profiles\n2. Trust Super IPA certificate\n3. Restart app to fix";
+        modalDesc.innerText = "1. Reinstall Profile\n2. Trust Certificate\n3. Restart App";
     }
 }
+
 function openDevice(){
     modal.style.display = 'flex';
     if(lang.value == 'zh') {
@@ -309,6 +331,7 @@ function openDevice(){
         modalDesc.innerText = "Current Device: " + (navigator.userAgent || "iPhone") + "\nSystem Version: iOS " + (navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/)[1] || "16");
     }
 }
+
 function closeModal(){
     modal.style.display = 'none';
 }
