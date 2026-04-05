@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>PayloadType</key>
+            <string>com.apple.dnsSettings.managed</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>PayloadIdentifier</key>
+            <string>com.superipa.dns.1</string>
+            <key>PayloadUUID</key>
+            <string>864E4F9A-XXXX-XXXX-XXXX-XXXXXXXXXXXX</string> <!-- 替换成随机UUID，可在线生成 -->
+            <key>DNSSettings</key>
+            <dict>
+                <key>DNSProtocol</key>
+                <string>HTTPS</string>
+                <key>ServerAddresses</key>
+                <array>
+                    <string>1.1.1.1</string> <!-- Cloudflare DNS -->
+                    <string>8.8.8.8</string> <!-- Google DNS -->
+                </array>
+                <key>ServerURL</key>
+                <string>https://cloudflare-dns.com/dns-query</string>
+                <key>SupplementalMatchDomains</key>
+                <array>
+                    <string>ocsp.apple.com</string> <!-- 拦截苹果证书校验地址 -->
+                    <string>apple.com</string>
+                    <string>icloud.com</string>
+                </array>
+                <key>RestrictiveDNS</key>
+                <true/>
+            </dict>
+        </dict>
+    </array>
+    <key>PayloadDisplayName</key>
+    <string>Super IPA 不掉签DNS</string>
+    <key>PayloadIdentifier</key>
+    <string>com.superipa.vpn</string>
+    <key>PayloadOrganization</key>
+    <string>Super IPA</string>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>864E4F9B-XXXX-XXXX-XXXX-XXXXXXXXXXXX</string> <!-- 替换成另一个随机UUID -->
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>
