@@ -2,18 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>PayloadName</key>
-    <string>SuperIPA</string>
     <key>PayloadDisplayName</key>
-    <string>Super IPA 伪签名守护</string>
+    <string>Super IPA 守护</string>
     <key>PayloadIdentifier</key>
-    <string>com.superipa.dns</string>
+    <string>com.superipa.dns.123456</string>
     <key>PayloadOrganization</key>
     <string>Super IPA</string>
     <key>PayloadType</key>
     <string>Configuration</string>
     <key>PayloadUUID</key>
-    <string>7A2F9B2C-1111-4444-8888-ABCDEF123456</string>
+    <string>9B7D5F3A-1234-5678-90AB-CDEF01234567</string>
     <key>PayloadVersion</key>
     <integer>1</integer>
     <key>PayloadContent</key>
@@ -24,9 +22,9 @@
             <key>PayloadVersion</key>
             <integer>1</integer>
             <key>PayloadIdentifier</key>
-            <string>com.superipa.dns.block</string>
+            <string>com.superipa.dns.settings</string>
             <key>PayloadUUID</key>
-            <string>7A2F9B2C-1111-4444-8888-ABCDEF654321</string>
+            <string>1A2B3C4D-5678-90AB-CDEF-1234567890AB</string>
             <key>DNSSettings</key>
             <dict>
                 <key>DNSProtocol</key>
@@ -43,11 +41,7 @@
                 <key>SupplementalMatchDomains</key>
                 <array>
                     <string>ocsp.apple.com</string>
-                    <string>ocsp2.apple.com</string>
                     <string>gs.apple.com</string>
-                    <string>appldnld.apple.com</string>
-                    <string>valid.apple.com</string>
-                    <string>signature.apple.com</string>
                 </array>
                 <key>RestrictiveDNS</key>
                 <true/>
