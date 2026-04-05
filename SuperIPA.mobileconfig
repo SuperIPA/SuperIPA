@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadName</key>
+    <string>SuperIPA</string>
+    <key>PayloadDisplayName</key>
+    <string>Super IPA 伪签名守护</string>
+    <key>PayloadIdentifier</key>
+    <string>com.superipa.dns</string>
+    <key>PayloadOrganization</key>
+    <string>Super IPA</string>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>7A2F9B2C-1111-4444-8888-ABCDEF123456</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>PayloadType</key>
+            <string>com.apple.dnsSettings.managed</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>PayloadIdentifier</key>
+            <string>com.superipa.dns.block</string>
+            <key>PayloadUUID</key>
+            <string>7A2F9B2C-1111-4444-8888-ABCDEF654321</string>
+            <key>DNSSettings</key>
+            <dict>
+                <key>DNSProtocol</key>
+                <string>HTTPS</string>
+                <key>ServerURL</key>
+                <string>https://cloudflare-dns.com/dns-query</string>
+                <key>ServerName</key>
+                <string>cloudflare-dns.com</string>
+                <key>ServerAddresses</key>
+                <array>
+                    <string>1.1.1.1</string>
+                    <string>8.8.8.8</string>
+                </array>
+                <key>SupplementalMatchDomains</key>
+                <array>
+                    <string>ocsp.apple.com</string>
+                    <string>ocsp2.apple.com</string>
+                    <string>gs.apple.com</string>
+                    <string>appldnld.apple.com</string>
+                    <string>valid.apple.com</string>
+                    <string>signature.apple.com</string>
+                </array>
+                <key>RestrictiveDNS</key>
+                <true/>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>
