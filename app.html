@@ -6,292 +6,33 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Super IPA">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>Super IPA | Hacker Edition</title>
-    <style>
-        * {margin: 0;padding: 0;box-sizing: border-box;-webkit-user-select: none;user-select: none;}
-        body {
-            background: #000;
-            background-image: radial-gradient(#113322 1px, transparent 1px);
-            background-size: 20px 20px;
-            color: #00ff41;
-            font-family: 'Consolas', 'Monaco', monospace;
-            min-height: 100vh;
-            padding: 40px 20px 30px;
-            text-align: center;
-            position: relative;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;left: 0;width: 100%;height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95));
-            z-index: -1;
-        }
-        /* 黑客风光标闪烁 */
-        @keyframes blink {0%,100%{opacity: 1;}50%{opacity: 0;}}
-        .blink {animation: blink 1s infinite;}
-        /* 专属苹果图标容器 - 黑客风渐变+发光 */
-        .app_icon {
-            width: 120px;
-            height: 120px;
-            border-radius: 28px;
-            margin: 0 auto 30px;
-            overflow: hidden;
-            border: 2px solid #00ff41;
-            box-shadow: 0 0 15px #00ff41, 0 0 30px rgba(0,255,65,0.5);
-            position: relative;
-        }
-        .app_icon img {width: 100%;height: 100%;object-fit: cover;}
-        .app_icon::after {
-            content: '';
-            position: absolute;
-            top: 0;left: 0;width: 100%;height: 100%;
-            background: rgba(0,255,65,0.1);
-        }
-        /* 标题区 - 黑客风字符样式 */
-        .app_name {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-shadow: 0 0 8px #00ff41;
-            letter-spacing: 2px;
-        }
-        .app_sub {
-            font-size: 14px;
-            color: #00cc33;
-            margin-bottom: 35px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        /* 语言选择 - 黑客风深色框 */
-        .lang_select {
-            padding: 10px 15px;
-            background: #0a1a0f;
-            color: #00ff41;
-            border: 1px solid #00ff41;
-            border-radius: 8px;
-            margin-bottom: 35px;
-            font-family: 'Consolas', monospace;
-            font-size: 15px;
-            outline: none;
-            box-shadow: 0 0 8px rgba(0,255,65,0.3);
-        }
-        .lang_select option {background: #000;color: #00ff41;border: none;}
-        /* 状态卡片 - 巨魔商店同款深色磨砂+发光 */
-        .status_card {
-            background: rgba(10,26,15,0.7);
-            backdrop-filter: blur(8px);
-            padding: 25px 20px;
-            border-radius: 12px;
-            margin-bottom: 35px;
-            border: 1px solid #00ff41;
-            box-shadow: 0 0 12px rgba(0,255,65,0.4);
-        }
-        .status_title {
-            font-size: 16px;
-            color: #00cc33;
-            margin-bottom: 12px;
-            text-align: left;
-            letter-spacing: 0.5px;
-        }
-        .status_text {
-            font-size: 22px;
-            font-weight: 600;
-            text-align: left;
-            text-shadow: 0 0 6px #00ff41;
-        }
-        /* 按钮 - 黑客风主按钮/副按钮，hover发光 */
-        .btn_main {
-            display: block;
-            width: 100%;
-            padding: 20px;
-            background: #00ff41;
-            color: #000;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: 700;
-            font-family: 'Consolas', monospace;
-            border: none;
-            margin-bottom: 15px;
-            box-shadow: 0 0 10px #00ff41, 0 0 20px rgba(0,255,65,0.6);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn_main:hover {background: #00cc33;box-shadow: 0 0 15px #00cc33, 0 0 30px rgba(0,204,51,0.7);}
-        .btn_alt {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background: transparent;
-            color: #00ff41;
-            font-size: 16px;
-            font-weight: 600;
-            font-family: 'Consolas', monospace;
-            border: 2px solid #00ff41;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 8px rgba(0,255,65,0.3);
-        }
-        .btn_alt:hover {
-            background: rgba(0,255,65,0.1);
-            box-shadow: 0 0 12px #00ff41, 0 0 25px rgba(0,255,65,0.5);
-        }
-        /* 底部提示 - 黑客风小字，渐变色 */
-        .bottom_tip {
-            font-size: 12px;
-            color: #00cc33;
-            margin-top: 50px;
-            line-height: 1.8;
-            letter-spacing: 0.5px;
-        }
-        .bottom_tip span {color: #00ff41;text-shadow: 0 0 4px #00ff41;}
-    </style>
+    <title>Super IPA | V1.0 Edition</title>
+    <style>*{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none;}body{background:#000;background-image:radial-gradient(#113322 1px,transparent 1px);background-size:20px 20px;color:#00ff41;font-family:'Consolas','Monaco',monospace;min-height:100vh;padding:40px 20px 30px;text-align:center;position:relative;overflow:hidden;}body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.95));z-index:-1;}@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}.blink{animation:blink 1s infinite;}.app_icon{width:120px;height:120px;border-radius:28px;margin:0 auto 30px;overflow:hidden;border:2px solid #00ff41;box-shadow:0 0 15px #00ff41,0 0 30px rgba(0,255,65,0.5);position:relative;z-index:2;}.app_icon img{width:100%;height:100%;object-fit:cover;}.app_icon::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,255,65,0.1);}.app_name{font-size:32px;font-weight:700;margin-bottom:8px;text-shadow:0 0 8px #00ff41;letter-spacing:2px;position:relative;z-index:2;}.app_sub{font-size:14px;color:#00cc33;margin-bottom:35px;text-transform:uppercase;letter-spacing:1px;position:relative;z-index:2;}.lang_select{padding:10px 15px;background:#0a1a0f;color:#00ff41;border:1px solid #00ff41;border-radius:8px;margin-bottom:35px;font-family:'Consolas',monospace;font-size:15px;outline:none;box-shadow:0 0 8px rgba(0,255,65,0.3);position:relative;z-index:2;}.lang_select option{background:#000;color:#00ff41;border:none;}.status_card{background:rgba(10,26,15,0.7);backdrop-filter:blur(8px);padding:25px 20px;border-radius:12px;margin-bottom:35px;border:1px solid #00ff41;box-shadow:0 0 12px rgba(0,255,65,0.4);position:relative;z-index:2;}.status_title{font-size:16px;color:#00cc33;margin-bottom:12px;text-align:left;letter-spacing:0.5px;}.status_text{font-size:22px;font-weight:60;text-align:left;text-shadow:0 0 6px #00ff41;}.btn_main{display:block;width:100%;padding:20px;background:#00ff41;color:#000;border-radius:10px;font-size:18px;font-weight:700;font-family:'Consolas',monospace;border:none;margin-bottom:15px;box-shadow:0 0 10px #00ff41,0 0 20px rgba(0,255,65,0.6);cursor:pointer;transition:all 0.3s;position:relative;z-index:2;}.btn_main:hover{background:#00cc33;box-shadow:0 0 15px #00cc33,0 0 30px rgba(0,204,51,0.7);}.btn_alt{display:block;width:100%;padding:18px;background:transparent;color:#00ff41;font-size:16px;font-weight:600;font-family:'Consolas',monospace;border:2px solid #00ff41;border-radius:10px;cursor:pointer;transition:all 0.3s;box-shadow:0 0 8px rgba(0,255,65,0.3);position:relative;z-index:2;}.btn_alt:hover{background:rgba(0,255,65,0.1);box-shadow:0 0 12px #00ff41,0 0 25px rgba(0,255,65,0.5);}.bottom_tip{font-size:12px;color:#00cc33;margin-top:50px;line-height:1.8;letter-spacing:0.5px;position:relative;z-index:2;}.bottom_tip span{color:#00ff41;text-shadow:0 0 4px #00ff41;}.matrix-rain{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.15;}</style>
 </head>
 <body>
+<canvas class="matrix-rain" id="matrix"></canvas>
 <div class="app_box">
-    <!-- 你的专属苹果图标 -->
     <div class="app_icon">
         <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAESpI9p0cdVeZ5F13OYGmtsjcGyafpr6gAClB8AAlDQiFaQhIOJM79H8DsE.jpeg" alt="Super IPA Icon">
     </div>
-    <!-- 标题区 -->
     <div class="app_name" id="app_title">SUPER IPA<span class="blink">_</span></div>
     <div class="app_sub" id="app_sub">Auto ReSign · Anti Revoke | Hacker Build</div>
-    <!-- 语言选择 -->
     <select class="lang_select" id="langSwitch" onchange="changeLang()">
-        <option value="en" selected>EN · HACKER</option>
-        <option value="cn">中 · HACKER</option>
+        <option value="en" selected>EN · English</option>
+        <option value="cn">中 · 简体中文</option>
     </select>
-    <!-- 状态卡片 -->
     <div class="status_card">
         <div class="status_title" id="status_label">SIGNATURE STATUS : </div>
-        <div class="status_text" id="status_txt">LOADING<span class="blink">.</span><span class="blink">.</span><span class="blink">.</span></div>
+        <div class="status_text" id="status_txt">LOADING<span class='blink'>.</span><span class='blink'>.</span><span class='blink'>.</span></div>
     </div>
-    <!-- 功能按钮 -->
     <button class="btn_main" onclick="startResign()" id="btn_resign">INSTALL / RESIGN</button>
     <button class="btn_alt" onclick="resetTime()" id="btn_reset">RESET SIGN TIME</button>
-    <!-- 底部提示 -->
     <div class="bottom_tip" id="footer_txt">
         LOCAL ONLY · NO JAILBREAK<br>
-        iOS 14-26 SUPPORTED · <span>OPEN SOURCE HACK</span><br>
+        iOS 14-26 SUPPORTED · <span>OPEN SOURCE</span><br>
         TROLLSTORE COMPATIBLE
     </div>
 </div>
-
-<script>
-// 核心配置
-const KEY = "super_ipa_last_resign";
-const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
-const IPA_INSTALL_URL = "itms-services://?action=download-manifest&url=https://superipa.github.io/SuperIPA/manifest.plist";
-
-// 多语言配置 - 黑客风文案
-const lang = {
-    en: {
-        title: "SUPER IPA<span class='blink'>_</span>",
-        sub: "Auto ReSign · Anti Revoke | Hacker Build",
-        status: "SIGNATURE STATUS : ",
-        btnResign: "INSTALL / RESIGN",
-        btnReset: "RESET SIGN TIME",
-        footer: "LOCAL ONLY · NO JAILBREAK<br>iOS 14-26 SUPPORTED · <span>OPEN SOURCE HACK</span><br>TROLLSTORE COMPATIBLE",
-        normal: "NORMAL · REMAIN ",
-        expireSoon: "EXPIRE SOON · REMAIN ",
-        expired: "EXPIRED · NEED RESIGN",
-        resetSuccess: "SIGN TIME RESET ✔️",
-        loading: "LOADING<span class='blink'>.</span><span class='blink'>.</span><span class='blink'>.</span>"
-    },
-    cn: {
-        title: "超级签<span class='blink'>_</span>",
-        sub: "自动续签 · 防掉签 | 黑客定制版",
-        status: "签名状态 : ",
-        btnResign: "立即安装 / 续签",
-        btnReset: "重置续签时间",
-        footer: "纯本地运行 · 无需越狱<br>iOS 14-26 全兼容 · <span>开源极客工具</span><br>巨魔商店适配",
-        normal: "状态正常 · 剩余 ",
-        expireSoon: "即将过期 · 剩余 ",
-        expired: "已过期 · 请续签",
-        resetSuccess: "续签时间重置成功 ✔️",
-        loading: "加载中<span class='blink'>.</span><span class='blink'>.</span><span class='blink'>.</span>"
-    }
-};
-
-let currentLang = "en";
-
-// 语言切换
-function changeLang() {
-    currentLang = document.getElementById("langSwitch").value;
-    applyLang();
-    updateUI();
-}
-// 应用语言配置
-function applyLang() {
-    const l = lang[currentLang];
-    document.getElementById("app_title").innerHTML = l.title;
-    document.getElementById("app_sub").innerText = l.sub;
-    document.getElementById("status_label").innerText = l.status;
-    document.getElementById("btn_resign").innerText = l.btnResign;
-    document.getElementById("btn_reset").innerText = l.btnReset;
-    document.getElementById("footer_txt").innerHTML = l.footer;
-}
-
-// 时间处理核心方法
-function now() { return Date.now(); }
-function setSignTime() { localStorage.setItem(KEY, now()); }
-function getSignTime() {
-    let t = localStorage.getItem(KEY);
-    if(!t) { setSignTime(); return now(); }
-    return parseInt(t);
-}
-// 计算剩余时间
-function getRemainDays() {
-    let passTime = now() - getSignTime();
-    let leftTime = SEVEN_DAYS - passTime;
-    if(leftTime < 0) return 0;
-    return (leftTime / (1000*60*60*24)).toFixed(1);
-}
-
-// 更新页面状态
-function updateUI() {
-    let remain = getRemainDays();
-    let statusDom = document.getElementById("status_txt");
-    let l = lang[currentLang];
-    statusDom.innerHTML = l.loading;
-
-    setTimeout(() => {
-        if(remain <= 0) {
-            statusDom.innerText = l.expired;
-            statusDom.style.color = "#ff3b30";
-            statusDom.style.textShadow = "0 0 8px #ff3b30";
-        } else if(remain <= 1) {
-            statusDom.innerText = l.expireSoon + remain + "d";
-            statusDom.style.color = "#ff9500";
-            statusDom.style.textShadow = "0 0 8px #ff9500";
-        } else {
-            statusDom.innerText = l.normal + remain + "d";
-            statusDom.style.color = "#00ff41";
-            statusDom.style.textShadow = "0 0 8px #00ff41";
-        }
-    }, 800);
-}
-
-// 安装/续签核心方法（直接唤起plist安装）
-function startResign() {
-    setSignTime();
-    updateUI();
-    window.location.href = IPA_INSTALL_URL;
-}
-// 重置时间
-function resetTime() {
-    setSignTime();
-    updateUI();
-    alert(lang[currentLang].resetSuccess);
-}
-
-// 页面初始化
-window.onload = function() {
-    applyLang();
-    updateUI();
-    setInterval(updateUI, 60000); // 每分钟更新一次状态
-}
-</script>
+<script>const KEY="super_ipa_last_resign";const SEVEN_DAYS=7*24*60*60*1000;const IPA_INSTALL_URL="itms-services://?action=download-manifest&url=https://superipa.github.io/SuperIPA/manifest.plist";const lang={en:{title:"SUPER IPA<span class='blink'>_</span>",sub:"Auto ReSign · Anti Revoke | Hacker Build",status:"SIGNATURE STATUS : ",btnResign:"INSTALL / RESIGN",btnReset:"RESET SIGN TIME",footer:"LOCAL ONLY · NO JAILBREAK<br>iOS 14-26 SUPPORTED · <span>OPEN SOURCE HACK</span><br>TROLLSTORE COMPATIBLE",normal:"NORMAL · REMAIN ",expireSoon:"EXPIRE SOON · REMAIN ",expired:"EXPIRED · NEED RESIGN",resetSuccess:"SIGN TIME RESET ✔️",loading:"LOADING<span class='blink'>.</span><span class='blink'>.</span><span class='blink'>.</span>"},cn:{title:"超级签<span class='blink'>_</span>",sub:"自动续签 · 防掉签 | 黑客定制版",status:"签名状态 : ",btnResign:"立即安装 / 续签",btnReset:"重置续签时间",footer:"纯本地运行 · 无需越狱<br>iOS 14-26 全兼容 · <span>开源极客工具</span><br>巨魔商店适配",normal:"状态正常 · 剩余 ",expireSoon:"即将过期 · 剩余 ",expired:"已过期 · 请续签",resetSuccess:"续签时间重置成功 ✔️",loading:"加载中<span class='blink'>.</span><span class='blink'>.</span><span class='blink'>.</span>"}};let currentLang="en";function changeLang(){currentLang=document.getElementById("langSwitch").value;applyLang();updateUI();}function applyLang(){const l=lang[currentLang];document.getElementById("app_title").innerHTML=l.title;document.getElementById("app_sub").innerText=l.sub;document.getElementById("status_label").innerText=l.status;document.getElementById("btn_resign").innerText=l.btnResign;document.getElementById("btn_reset").innerText=l.btnReset;document.getElementById("footer_txt").innerHTML=l.footer;}function now(){return Date.now();}function setSignTime(){localStorage.setItem(KEY,now());}function getSignTime(){let t=localStorage.getItem(KEY);if(!t){setSignTime();return now();}return parseInt(t);}function getRemainDays(){let passTime=now()-getSignTime();let leftTime=SEVEN_DAYS-passTime;if(leftTime<0)return 0;return(leftTime/(1000*60*60*24)).toFixed(1);}function updateUI(){let remain=getRemainDays();let statusDom=document.getElementById("status_txt");let l=lang[currentLang];statusDom.innerHTML=l.loading;setTimeout(()=>{if(remain<=0){statusDom.innerText=l.expired;statusDom.style.color="#ff3b30";statusDom.style.textShadow="0 0 8px #ff3b30";}else if(remain<=1){statusDom.innerText=l.expireSoon+remain+"d";statusDom.style.color="#ff9500";statusDom.style.textShadow="0 0 8px #ff9500";}else{statusDom.innerText=l.normal+remain+"d";statusDom.style.color="#00ff41";statusDom.style.textShadow="0 0 8px #00ff41";}},800);}function startResign(){setSignTime();updateUI();window.location.href=IPA_INSTALL_URL;}function resetTime(){setSignTime();updateUI();alert(lang[currentLang].resetSuccess);}window.onload=function(){applyLang();updateUI();setInterval(updateUI,60000);};const canvas=document.getElementById("matrix");const ctx=canvas.getContext("2d");canvas.width=window.innerWidth;canvas.height=window.innerHeight;const green="#00ff41";const chars="0123456789";const fontSize=14;const columns=Math.floor(canvas.width/fontSize);const drops=[];for(let i=0;i<columns;i++)drops[i]=Math.floor(Math.random()*canvas.height);function draw(){ctx.fillStyle="rgba(0,0,0,0.05)";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle=green;ctx.font=fontSize+"px monospace";for(let i=0;i<drops.length;i++){const text=chars[Math.floor(Math.random()*chars.length)];ctx.fillText(text,i*fontSize,drops[i]*fontSize);if(drops[i]*fontSize>canvas.height&&Math.random()>0.975){drops[i]=0;}drops[i]++;}setInterval(draw,35);}window.addEventListener("resize",()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});</script>
 </body>
 </html>
