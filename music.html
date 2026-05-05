@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全网极致音乐播放器 - 全曲库免费畅听</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+        body {
+            background: #050510;
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 90px;
+            background-image: radial-gradient(circle,#101030 0%,#050510 70%);
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin: 15px 0 25px;
+            color: #00f5d4;
+            text-shadow: 0 0 10px #00f5d4;
+            font-size: 26px;
+        }
+        /* 功能导航栏 */
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 7px 16px;
+            border-radius: 25px;
+            border: none;
+            background: #1a1a35;
+            color: #ccc;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .nav-btn.active {
+            background: #00f5d4;
+            color: #000;
+            font-weight: bold;
+            box-shadow: 0 0 8px #00f5d4;
+        }
+        /* 音源切换 */
+        .source-select {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .source-btn {
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: none;
+            background: #1f1f40;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .source-btn.active {
+            background: #00f5d4;
+            color: #000;
+            box-shadow: 0 0 10px #00f5d4;
+        }
+        /* 搜索区域 */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        #keyWord {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 50px;
+            border: 1px solid #2c2c55;
+            background: #121228;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+        #search {
+            padding: 14px 28px;
+            border-radius: 50px;
+            border: none;
+            background: #00f5d4;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,245,212,0.4);
+        }
+        /* 歌曲列表通用样式 */
+        .music-list {
+            background: #101025;
+            border-radius: 22px;
+            overflow: hidden;
+            border: 1px solid #25254a;
+        }
+        .music-item {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #25254a;
+            transition: background 0.25s;
+        }
+        .music-item:hover {
+            background: #181838;
+        }
+        .song-info .name {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+        .song-info .author {
+            font-size: 13px;
+            color: #8a8ab8;
+        }
+        .operate {
+            display: flex;
+            gap: 12px;
+        }
+        .play-btn,.down-btn,.like-btn {
+            color: #00f5d4;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        /* 底部固定播放器 */
+        .fixed-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #0a0a20;
+            padding: 10px 20px;
+            border-top: 1px solid #25254a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        audio {
+            flex: 1;
+            height: 42px;
+        }
+        .hide {display: none;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 全网聚合无损音乐中心</h1>
+        <!-- 功能切换：搜索/热榜/历史/收藏 -->
+        <div class="nav-bar">
+            <button class="nav-btn active" data-type="search">歌曲搜索</button>
+            <button class="nav-btn" data-type="rank">全网热榜</button>
+            <button class="nav-btn" data-type="history">播放历史</button>
+            <button class="nav-btn" data-type="love">我的收藏</button>
+        </div>
+        <!-- 音源切换 -->
+        <div class="source-select">
+            <button class="source-btn active" data-server="netease">网易云</button>
+            <button class="source-btn" data-server="tencent">QQ音乐</button>
+            <button class="source-btn" data-server="kuwo">酷我音乐</button>
+        </div>
+        <!-- 搜索框 -->
+        <div class="search-box" id="searchWrap">
+            <input type="text" id="keyWord" placeholder="搜VIP、老歌、全网冷门单曲，全部可播">
+            <button id="search">一键搜索</button>
+        </div>
+        <!-- 音乐展示列表 -->
+        <div class="music-list" id="listBox"></div>
+    </div>
+
+    <!-- 全局底部播放器 -->
+    <div class="fixed-player">
+        <span>播放面板</span>
+        <audio id="audioPlayer" controls>
+    </div>
+
+    <script>
+        // 全局配置
+        let server = "netease";
+        let pageType = "search";
+        const api = "https://api.injahow.cn/meting/api";
+        // 本地缓存 历史+收藏
+        let playHistory = JSON.parse(localStorage.getItem('musicHistory')) || [];
+        let loveList = JSON.parse(localStorage.getItem('musicLove')) || [];
+
+        // DOM元素
+        const sourceBtns = document.querySelectorAll('.source-btn');
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const searchBtn = document.getElementById('search');
+        const input = document.getElementById('keyWord');
+        const listBox = document.getElementById('listBox');
+        const audio = document.getElementById('audioPlayer');
+        const searchWrap = document.getElementById('searchWrap');
+
+        // 1.切换音乐源
+        sourceBtns.forEach(btn => {
+            btn.onclick = function() {
+                sourceBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                server = this.dataset.server;
+            }
+        });
+
+        // 2.切换页面功能标签
+        navBtns.forEach(btn => {
+            btn.onclick = function() {
+                navBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                pageType = this.dataset.type;
+                // 控制搜索框显示隐藏
+                searchWrap.className = pageType==='search'?'search-box':'search-box hide';
+                switch(pageType){
+                    case 'rank': getRank();break;
+                    case 'history': renderHistory();break;
+                    case 'love': renderLove();break;
+                    default: listBox.innerHTML='';
+                }
+            }
+        });
+
+        // 搜索歌曲
+        async function searchMusic() {
+            let kw = input.value.trim();
+            if(!kw) return alert('请输入搜索的歌名/歌手！');
+            listBox.innerHTML = '<div style="padding:30px;text-align:center;color:#999">全网抓取曲库加载中...</div>';
+            let res = await fetch(`${api}?server=${server}&type=search&keywords=${encodeURIComponent(kw)}`);
+            let data = await res.json();
+            renderMusic(data);
+        }
+
+        // 获取音乐热榜
+        async function getRank() {
+            listBox.innerHTML = '<div style="padding:30px;text-align:center;color:#999">热门榜单加载中...</div>';
+            let res = await fetch(`${api}?server=${server}&type=rank`);
+            let data = await res.json();
+            renderMusic(data);
+        }
+
+        // 渲染通用歌曲列表
+        function renderMusic(arr) {
+            listBox.innerHTML = '';
+            if(!arr || arr.length===0){
+                listBox.innerHTML = '<div style="padding:30px;text-align:center">暂无数据，切换音源重试</div>';
+                return;
+            }
+            arr.forEach(item => {
+                const isLoved = loveList.some(v=>v.id===item.id&&v.server===server);
+                let div = document.createElement('div');
+                div.className = "music-item";
+                div.innerHTML = `
+                    <div class="song-info">
+                        <div class="name">${item.title}</div>
+                        <div class="author">${item.author}</div>
+                    </div>
+                    <div class="operate">
+                        <span class="play-btn" data-id="${item.id}" data-name="${item.title}" data-author="${item.author}">▶播放</span>
+                        <span class="like-btn" data-id="${item.id}" data-title="${item.title}" data-author="${item.author}" style="color:${isLoved?'red':'#00f5d4'}">❤️收藏</span>
+                        <span class="down-btn" data-id="${item.id}">⬇下载</span>
+                    </div>
+                `;
+                listBox.appendChild(div);
+            });
+            bindEvent();
+        }
+
+        // 绑定播放、下载、收藏事件
+        function bindEvent(){
+            // 播放
+            document.querySelectorAll('.play-btn').forEach(el=>{
+                el.onclick = async e => {
+                    e.stopPropagation();
+                    const id = el.dataset.id;
+                    // 加入播放历史
+                    const historyItem = {id,name:el.dataset.name,author:el.dataset.author,server};
+                    const idx = playHistory.findIndex(v=>v.id===id&&v.server===server);
+                    if(idx>-1) playHistory.splice(idx,1);
+                    playHistory.unshift(historyItem);
+                    localStorage.setItem('musicHistory',JSON.stringify(playHistory));
+                    // 获取播放地址
+                    let res = await fetch(`${api}?server=${server}&type=url&id=${id}`);
+                    let urlData = await res.json();
+                    audio.src = urlData.url;
+                    audio.play();
+                }
+            });
+            // 下载
+            document.querySelectorAll('.down-btn').forEach(el=>{
+                el.onclick = async e => {
+                    e.stopPropagation();
+                    let dRes = await fetch(`${api}?server=${server}&type=download&id=${el.dataset.id}`);
+                    let dData = await dRes.json();
+                    window.open(dData.url);
+                }
+            });
+            // 收藏切换
+            document.querySelectorAll('.like-btn').forEach(el=>{
+                el.onclick = e => {
+                    e.stopPropagation();
+                    const loveItem = {
+                        id:el.dataset.id,title:el.dataset.title,author:el.dataset.author,server
+                    };
+                    const index = loveList.findIndex(v=>v.id===loveItem.id&&v.server===server);
+                    if(index>-1){
+                        loveList.splice(index,1);
+                        el.style.color="#00f5d4";
+                    }else{
+                        loveList.push(loveItem);
+                        el.style.color="red";
+                    }
+                    localStorage.setItem('musicLove',JSON.stringify(loveList));
+                }
+            });
+        }
+
+        // 渲染播放历史
+        function renderHistory(){
+            listBox.innerHTML='';
+            if(playHistory.length===0){
+                listBox.innerHTML='<div style="padding:30px;text-align:center">暂无播放记录</div>';
+                return;
+            }
+            playHistory.forEach(item=>{
+                let div = document.createElement('div');
+                div.className="music-item";
+                div.innerHTML=`
+                    <div class="song-info">
+                        <div class="name">${item.name}</div>
+                        <div class="author">${item.author}</div>
+                    </div>
+                    <span class="play-btn" data-history-id="${item.id}" data-his-server="${item.server}">▶立即播放</span>
+                `;
+                listBox.appendChild(div);
+            });
+            // 历史播放单独绑定
+            document.querySelectorAll('.play-btn[data-history-id]').forEach(el=>{
+                el.onclick = async ()=>{
+                    let sid = el.dataset.historyId;
+                    let srv = el.dataset.hisServer;
+                    let res = await fetch(`${api}?server=${srv}&type=url&id=${sid}`);
+                    let u = await res.json();
+                    audio.src=u.url;audio.play();
+                }
+            });
+        }
+
+        // 渲染我的收藏
+        function renderLove(){
+            listBox.innerHTML='';
+            if(loveList.length===0){
+                listBox.innerHTML='<div style="padding:30px;text-align:center">暂无收藏歌曲</div>';
+                return;
+            }
+            loveList.forEach(item=>{
+                let div = document.createElement('div');
+                div.className="music-item";
+                div.innerHTML=`
+                    <div class="song-info">
+                        <div class="name">${item.title}</div>
+                        <div class="author">${item.author}</div>
+                    </div>
+                    <span class="play-btn" data-love-id="${item.id}" data-love-server="${item.server}">▶播放</span>
+                `;
+                listBox.appendChild(div);
+            });
+            // 收藏播放绑定
+            document.querySelectorAll('.play-btn[data-love-id]').forEach(el=>{
+                el.onclick = async ()=>{
+                    let sid = el.dataset.loveId;
+                    let srv = el.dataset.loveServer;
+                    let res = await fetch(`${api}?server=${srv}&type=url&id=${sid}`);
+                    let u = await res.json();
+                    audio.src=u.url;audio.play();
+                }
+            });
+        }
+
+        // 回车+点击搜索触发
+        searchBtn.onclick = searchMusic;
+        input.addEventListener('keydown',e=>e.key==='Enter'&&searchMusic());
+    </script>
+</body>
+</html>
