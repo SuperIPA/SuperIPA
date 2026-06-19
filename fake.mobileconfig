@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>PayloadType</key>
+            <string>com.apple.vpn.managed</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>VPNType</key>
+            <string>L2TP</string>  <!-- 这里用L2TP只是为了触发代理规则 -->
+            <key>Proxies</key>
+            <dict>
+                <key>HTTPProxy</key>
+                <string>你的服务器IP</string>
+                <key>HTTPProxyPort</key>
+                <integer>443</integer>
+                <key>ProxyAutoConfigURLString</key>
+                <string>https://你的服务器IP/ocsp.pac</string>
+            </dict>
+        </dict>
+    </array>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+</dict>
+</plist>
