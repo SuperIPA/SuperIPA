@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏中心 | 杨耀轩生日快乐</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            transition: all 1s ease;
+        }
+
+        /* ===== 游戏选择蒙板层 ===== */
+        .game-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #0a0a0a;
+            z-index: 99;
+            padding: 30px 20px;
+            color: white;
+            overflow-y: auto;
+        }
+        .tab-header {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .tab-btn {
+            padding: 10px 24px;
+            border-radius: 999px;
+            border: 1px solid #444;
+            background: #1a1a1a;
+            color: #aaa;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background: #7c3aed;
+            color: white;
+            border-color: #7c3aed;
+        }
+        .container-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .column-title {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        .game-item {
+            padding: 14px 18px;
+            background: #181818;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: background 0.3s;
+        }
+        .game-item:hover {
+            background: #282828;
+        }
+        .game-rank {
+            font-size: 18px;
+            width: 30px;
+            color: #999;
+        }
+        .game-name {
+            font-size: 17px;
+        }
+
+        /* Roblox弹窗 */
+        .roblox-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .modal-card {
+            background: #111;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 360px;
+            width: 90%;
+        }
+        .roblox-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 16px;
+            margin: 0 auto 20px;
+            object-fit: cover;
+        }
+        .modal-btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-size: 18px;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        .download-btn {
+            background: #2563eb;
+            color: white;
+        }
+        .buy-btn {
+            background: #22c55e;
+            color: white;
+        }
+        .close-modal {
+            background: #444;
+            color: white;
+        }
+
+        /* ===== 星星闪烁 ===== */
+        .star {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            animation: starTwinkle 2s infinite ease-in-out;
+            z-index: 1;
+        }
+        @keyframes starTwinkle {
+            0%,100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.4); }
+        }
+        /* ===== 初始空白开启页 ===== */
+        .start-page {
+            width: 100%;
+            min-height: 100vh;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 30px;
+            z-index: 10;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.8s ease;
+        }
+        .start-tip {
+            color: #999;
+            font-size: 18px;
+        }
+        .open-btn {
+            padding: 18px 45px;
+            font-size: 22px;
+            border: none;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #ff6b6b, #ffda79, #63d471, #4ecdc4, #5b6fff, #b76eff);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 120, 180, 0.4);
+            transition: transform 0.3s;
+        }
+        .open-btn:hover {
+            transform: scale(1.08);
+        }
+        .open-btn:active {
+            box-shadow: 0 0 30px #ffdd00;
+        }
+        /* ===== 彩虹礼盒遮罩动画层 ===== */
+        .gift-box-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(120deg, #ff5e7d, #ffb86c, #fef08a, #86efac, #7dd3fc, #a78bfa, #f9a8d4);
+            z-index: 20;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+        .gift-box {
+            width: 220px;
+            height: 180px;
+            background: #ff3d68;
+            border-radius: 12px;
+            position: relative;
+            animation: boxShake 0.6s infinite alternate;
+        }
+        .gift-box::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            top: -20px;
+            background: #ff2457;
+            border-radius: 8px 8px 0 0;
+        }
+        .ribbon {
+            position: absolute;
+            width: 30px;
+            height: 220px;
+            background: #fff350;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .ribbon2 {
+            width: 220px;
+            height: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #fff350;
+        }
+        @keyframes boxShake {
+            0% { transform: rotate(-4deg); }
+            100% { transform: rotate(4deg); }
+        }
+        @keyframes boxExplode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(15); opacity: 0; }
+        }
+        /* ===== 生日主页面 ===== */
+        .birthday-page {
+            width: 100%;
+            min-height: 100vh;
+            padding: 40px 20px 120px;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fef9d7, #d4f5fe, #e0c3fc);
+            background-size: 400% 400%;
+            animation: gradientBg 12s ease infinite;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        @keyframes gradientBg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .title-main {
+            font-size: clamp(40px, 10vw, 80px);
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff2d78, #ff9500, #2dd4bf, #7c3aed);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 15px;
+            animation: textFloat 3s ease-in-out infinite;
+        }
+        @keyframes textFloat {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .birth-info {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        .age-text {
+            font-size: 20px;
+            color: #772ce8;
+            margin-bottom: 20px;
+        }
+        .wish-text {
+            font-size: 26px;
+            color: #444;
+            text-align: center;
+            line-height: 1.8;
+            max-width: 700px;
+            margin-bottom: 50px;
+        }
+        .func-btn-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+        .func-btn {
+            padding: 14px 32px;
+            font-size: 18px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn1 { background: #ff5e7d; color: white; }
+        .btn2 { background: #38bdf8; color: white; }
+        .btn3 { background: #a855f7; color: white; }
+        .func-btn:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .func-btn:active {
+            box-shadow: 0 0 25px #fff;
+        }
+        /* ===== 彩带碎片 ===== */
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            opacity: 0.8;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-10px) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(720deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 游戏选择黑色表层 -->
+    <div class="game-overlay" id="gameOverlay">
+        <div class="tab-header">
+            <button class="tab-btn active">热门</button>
+        </div>
+        <div class="container-row">
+            <div class="pc-col">
+                <h3 class="column-title">💻 PC端热门游戏</h3>
+                <div class="game-item">
+                    <span class="game-rank">1</span>
+                    <span class="game-name">Grand Theft Auto VI （Pre-order）</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">2</span>
+                    <span class="game-name">League of Legends</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">3</span>
+                    <span class="game-name">Minecraft</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">4</span>
+                    <span class="game-name">Valorant</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">5</span>
+                    <span class="game-name">APEX</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">6</span>
+                    <span class="game-name">PUBG</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">7</span>
+                    <span class="game-name">Cyberpunk 2077</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">8</span>
+                    <span class="game-name">Black Myth: Wukong</span>
+                </div>
+            </div>
+            <div class="mobile-col">
+                <h3 class="column-title">📱 手机端热门游戏</h3>
+                <div class="game-item roblox-item" id="robloxItem">
+                    <span class="game-rank">1</span>
+                    <span class="game-name">Roblox</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">2</span>
+                    <span class="game-name">Minecraft</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">3</span>
+                    <span class="game-name">Subway Surfers</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">4</span>
+                    <span class="game-name">Brawl Stars</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">5</span>
+                    <span class="game-name">Pokémon UNITE</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">6</span>
+                    <span class="game-name">Candy Crush Saga</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">7</span>
+                    <span class="game-name">PUBG MOBILE</span>
+                </div>
+                <div class="game-item">
+                    <span class="game-rank">8</span>
+                    <span class="game-name">Genshin Impact</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Roblox弹窗 -->
+    <div class="roblox-modal" id="robloxModal">
+        <div class="modal-card">
+            <img class="roblox-avatar" src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEXMe1qVguvVF6ZIGL_aDFGW75naHJqSwACtS4AAkvwsVYiT5kn-DZ31D0E.png" alt="Roblox">
+            <h2 class="text-white text-xl mb-4">Roblox</h2>
+            <button class="modal-btn download-btn" id="downloadBtn">下载</button>
+            <button class="modal-btn buy-btn" id="buyRobuxBtn">购买 Robux</button>
+            <button class="modal-btn close-modal" id="closeModal">返回</button>
+        </div>
+    </div>
+
+    <!-- 初始空白开启页 -->
+    <div class="start-page" id="startPage">
+        <p class="start-tip">一份专属惊喜等待开启</p>
+        <button class="open-btn" id="openGiftBtn">点击打开彩虹礼盒</button>
+    </div>
+
+    <!-- 彩虹礼盒动画遮罩 -->
+    <div class="gift-box-wrap" id="giftWrap">
+        <div class="gift-box">
+            <div class="ribbon"></div>
+            <div class="ribbon ribbon2"></div>
+        </div>
+    </div>
+
+    <!-- 生日完整页面 -->
+    <div class="birthday-page" id="birthdayPage">
+        <h1 class="title-main">杨耀轩 生日快乐</h1>
+        <p class="birth-info">出生日期：2008年07月03日</p>
+        <p class="age-text">今年已满18周岁，奔赴崭新美好人生！</p>
+        <div class="wish-text">
+            祝哥哥岁岁无忧，平安喜乐<br>
+            眼里有星光，前路皆坦荡<br>
+            学业节节高升，天天开心，天天向上，万事顺意！<br>
+            祝哥哥越来越高，越来越帅，越来越有钱，福气满满！<br>
+            祝哥哥生日快乐!!!
+        </div>
+        <div class="func-btn-group">
+            <button class="func-btn btn1" onclick="startConfetti()">漫天彩带</button>
+            <button class="func-btn btn2" onclick="alert('祝耀轩生日快乐，岁岁平安，前程似锦！')">专属祝福</button>
+            <button class="func-btn btn3" onclick="resetPage()">重新开启礼盒</button>
+        </div>
+    </div>
+
+    <script>
+        // 获取元素
+        const gameOverlay = document.getElementById('gameOverlay');
+        const robloxModal = document.getElementById('robloxModal');
+        const robloxItem = document.getElementById('robloxItem');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const buyRobuxBtn = document.getElementById('buyRobuxBtn');
+        const closeModal = document.getElementById('closeModal');
+
+        const startPage = document.getElementById('startPage');
+        const giftWrap = document.getElementById('giftWrap');
+        const birthdayPage = document.getElementById('birthdayPage');
+        const openBtn = document.getElementById('openGiftBtn');
+        const giftBox = giftWrap.querySelector('.gift-box');
+
+        // Roblox弹窗显示
+        robloxItem.addEventListener('click', function() {
+            robloxModal.style.display = 'flex';
+        })
+        // 关闭弹窗
+        closeModal.addEventListener('click', function() {
+            robloxModal.style.display = 'none';
+        })
+        // 【修改】购买Robux按钮：进入生日礼盒流程
+        buyRobuxBtn.addEventListener('click', function() {
+            robloxModal.style.display = 'none';
+            gameOverlay.style.display = 'none';
+            startPage.style.display = 'flex';
+        })
+        // 下载按钮仅关闭弹窗（不自动进生日页面）
+        downloadBtn.addEventListener('click', function() {
+            robloxModal.style.display = 'none';
+        })
+
+        // 生成背景星星
+        function createStar() {
+            for(let i=0; i<60; i++){
+                let star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random()*100 + '%';
+                star.style.top = Math.random()*100 + '%';
+                star.style.animationDelay = Math.random()*2 + 's';
+                birthdayPage.appendChild(star);
+            }
+        }
+
+        // 点击开启礼盒
+        openBtn.addEventListener('click', function() {
+            // 隐藏初始页面
+            startPage.style.opacity = "0";
+            setTimeout(() => startPage.style.display = "none", 800);
+
+            // 显示彩虹礼盒层
+            giftWrap.style.display = "flex";
+            setTimeout(() => giftWrap.style.opacity = "1", 50);
+
+            // 礼盒摇晃一段时间后炸开
+            setTimeout(() => {
+                giftBox.style.animation = "boxExplode 1s ease forwards";
+            }, 1200);
+
+            // 礼盒消失，展示生日页面
+            setTimeout(() => {
+                giftWrap.style.opacity = "0";
+                setTimeout(() => giftWrap.style.display = "none", 800);
+                birthdayPage.style.display = "flex";
+                createStar();
+                // 自动飘落彩带
+                startConfetti();
+            }, 2300);
+        })
+
+        // 生成全屏彩带
+        function startConfetti() {
+            const colors = ['#ff3d68','#ffcc00','#36e1b9','#7b61ff','#ff94c2','#40a9ff'];
+            for(let i=0; i<180; i++){
+                let piece = document.createElement('div');
+                piece.className = 'confetti';
+                piece.style.left = Math.random()*100 + 'vw';
+                piece.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+                piece.style.animationDuration = (Math.random()*3 + 2) + 's';
+                document.body.appendChild(piece);
+                setTimeout(()=> piece.remove(), 5000);
+            }
+        }
+
+        // 重置回到初始游戏界面
+        function resetPage() {
+            birthdayPage.style.display = "none";
+            // 清空星星
+            document.querySelectorAll('.star').forEach(el=>el.remove());
+            startPage.style.display = "none";
+            giftBox.style.animation = "";
+            window.scrollTo(0,0);
+            gameOverlay.style.display = "block";
+        }
+    </script>
+</body>
+</html>
